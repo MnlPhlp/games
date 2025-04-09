@@ -1,0 +1,23 @@
+[workspace]
+resolver = "2"
+members = ["convay"]
+
+[workspace.dependencies]
+egui = "0.30"
+eframe = { version = "0.30", default-features = false, features = [
+    "default_fonts", # Embed the default egui fonts.
+    "glow",          # Use the glow rendering backend. Alternative: "wgpu".
+    "persistence",   # Enable restoring app state when restarting the app.
+    "wayland",       # To support Linux (and CI)
+] }
+log = "0.4"
+
+egui_game.path="../egui_game"
+
+[profile.release]
+opt-level = 2 # fast and small wasm
+
+# Optimize all dependencies even in debug builds:
+[profile.dev.package."*"]
+opt-level = 2
+
