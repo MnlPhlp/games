@@ -27,9 +27,9 @@ struct GameOfLife {
     cells: Vec<bool>,
     next_cells: Vec<bool>,
     reset_cells: Vec<bool>,
-    step_time: f64,
-    last_step_time: f64,
-    time_elapsed: f64,
+    step_time: f32,
+    last_step_time: f32,
+    time_elapsed: f32,
     drawing_mode: bool,
     grid_mode: GridMode,
     paused: bool,
@@ -62,7 +62,7 @@ impl Game for GameOfLife {
         Self::default()
     }
 
-    fn update(&mut self, ctx: &mut UpdateContext<Self>, delta: f64) {
+    fn update(&mut self, ctx: &mut UpdateContext<Self>, delta: f32) {
         self.handle_input(ctx);
         self.time_elapsed += delta;
         if self.drawing_mode || self.time_elapsed < self.step_time || self.paused {
