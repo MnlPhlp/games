@@ -15,7 +15,7 @@ mkdir -p _site
 for path in $member_paths; do
     echo "Building $path"
     game=$(basename "$path")
-    game_list="$game_list\n    <li><a href="$game"/>$game</li>"
+    game_list="$game_list\n        <a href="$game"/>$game</a>"
     # Change to the member directory
     cd "$path"
     # Build the member

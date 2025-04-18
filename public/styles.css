@@ -89,3 +89,35 @@ h1{
     height: 80%;
 
 }
+
+a {
+    text-decoration: none;
+    font-size: 24px;
+    font-family: Ubuntu-Light, Helvetica, sans-serif;
+    color: #000;
+    text-align: center;
+    background-color: #DDD;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: min-content;
+}
+a:hover{
+    background-color: #AAA;
+}
+
+.col{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.back{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
+
