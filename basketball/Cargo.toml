@@ -8,5 +8,5 @@ log = "0.4"
 eframe = "0.30"
 egui = "0.30"
 
-egui_game.path="/home/manuel/programming/private/egui_game"
+egui_game.workspace = true
 geo = "0.30.0"
