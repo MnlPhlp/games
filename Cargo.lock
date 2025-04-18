@@ -1101,6 +1101,7 @@ dependencies = [
 [[package]]
 name = "egui_game"
 version = "0.1.0"
+source = "git+ssh://git@github.com/MnlPhlp/egui_game.git#19ccee1c65a7f782251ebcdbd7b4d228246dd9c0"
 dependencies = [
  "anyhow",
  "eframe",
