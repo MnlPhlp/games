@@ -1,4 +1,4 @@
-use egui::{Color32, Key, Pos2, Rect, Vec2, emath::Float};
+use egui::{Color32, Key, Pos2, Vec2};
 use egui_game::{Anchor, DrawContext, EguiGame, Game, ImageFit, UpdateContext};
 use geo::{Intersects, Line};
 

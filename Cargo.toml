@@ -12,7 +12,7 @@ eframe = { version = "0.30", default-features = false, features = [
 ] }
 log = "0.4"
 
-egui_game.path="../egui_game"
+egui_game = { git = "git@github.com:MnlPhlp/egui_game.git" }
 
 [profile.release]
 opt-level = 2 # fast and small wasm

@@ -1,5 +1,4 @@
 #! /usr/bin/env bash
-
 set -e
 
 # Get the metadata for the workspace
@@ -20,7 +19,7 @@ for path in $member_paths; do
     # Change to the member directory
     cd "$path"
     # Build the member
-    trunk build --public-url "/$game"
+    trunk build --release --public-url "$1/$game"
     # Change back to the original directory
     cd -
     # Copy the built files to the _site directory
