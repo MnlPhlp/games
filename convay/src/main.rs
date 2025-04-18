@@ -62,7 +62,7 @@ impl Game for GameOfLife {
         Self::default()
     }
 
-    fn update(&mut self, ctx: &mut UpdateContext<Self>, delta: f32) {
+    fn update(&mut self, ctx: &mut UpdateContext<Self>, delta: f32, _size: Vec2) {
         self.handle_input(ctx);
         self.time_elapsed += delta;
         if self.drawing_mode || self.time_elapsed < self.step_time || self.paused {

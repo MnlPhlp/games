@@ -9,3 +9,4 @@ eframe = "0.30"
 egui = "0.30"
 
 egui_game.path="/home/manuel/programming/private/egui_game"
+geo = "0.30.0"
