@@ -85,7 +85,9 @@ impl Game for GameOfLife {
                 self.step_time, self.last_step_time
             )
         };
-        let text_rect = ctx.text((5., 5.), format!("{line_1}\n{line_2}"), 20., Color32::WHITE);
+        let text_rect = ctx
+            .text((5., 5.), format!("{line_1}\n{line_2}"), 20., Color32::WHITE)
+            .rect();
 
         let line_thickness = if matches!(self.grid_mode, GridMode::Lines) {
             2.0

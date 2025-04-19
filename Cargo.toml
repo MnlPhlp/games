@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = [ "basketball","convay"]
+members = [ "basketball","convay","snake"]
 
 [workspace.dependencies]
 egui = "0.30"
@@ -13,6 +13,7 @@ eframe = { version = "0.30", default-features = false, features = [
 log = "0.4"
 
 egui_game = { git = "ssh://git@github.com/MnlPhlp/egui_game.git" }
+# egui_game.path = "/home/manuel/programming/private/egui_game"
 
 [profile.release]
 opt-level = 2 # fast and small wasm
@@ -20,4 +21,8 @@ opt-level = 2 # fast and small wasm
 # Optimize all dependencies even in debug builds:
 [profile.dev.package."*"]
 opt-level = 2
+
+[profile.profiling]
+inherits = "release"
+debug = true
 

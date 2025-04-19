@@ -1203,13 +1203,14 @@ dependencies = [
 [[package]]
 name = "egui_game"
 version = "0.1.0"
-source = "git+ssh://git@github.com/MnlPhlp/egui_game.git#7eba4e6f170302a382e718fe9bbc0da9fbb17ea6"
+source = "git+ssh://git@github.com/MnlPhlp/egui_game.git#fe0eb9ec59f171cfb1509d7f97b8e9ba849663dc"
 dependencies = [
  "anyhow",
  "eframe",
  "egui",
  "egui_extras",
  "env_logger",
+ "fastrand",
  "image",
  "log",
  "pollster",
@@ -3793,6 +3794,16 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dd538fb6910ac1099850255cf94a94df6551fbdd602454387d0adb2d1ca6dead"
 dependencies = [
  "serde",
+]
+
+[[package]]
+name = "snake"
+version = "0.1.0"
+dependencies = [
+ "eframe",
+ "egui",
+ "egui_game",
+ "log",
 ]
 
 [[package]]
