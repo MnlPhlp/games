@@ -8,7 +8,7 @@
 use std::collections::VecDeque;
 
 use egui::{Color32, Key, Pos2, Vec2};
-use egui_game::utils::random_usize;
+use egui_game::utils::random_u32;
 use egui_game::{Anchor, EguiGame};
 use egui_game::{DrawContext, Game, UpdateContext};
 
@@ -22,7 +22,7 @@ struct Snake {
     direction: Vec2,
     tick: f32,
     score: u32,
-    grid_size: usize,
+    grid_size: Vec2,
     elapsed: f32,
     collision: bool,
     highscore: u32,
@@ -34,12 +34,17 @@ impl Game for Snake {
             .and_then(|s| s.get_string("highscore"))
             .and_then(|s| s.parse::<u32>().ok())
             .unwrap_or(0);
+        let grid_size = Vec2::new(30., 20.);
         Self {
             segments: [Pos2::new(0.0, 0.0)].into(),
-            apple: random_pos(20, &[Pos2::new(0.0, 0.0)]),
+            apple: random_pos(
+                grid_size.x as u32,
+                grid_size.y as u32,
+                &[Pos2::new(0.0, 0.0)],
+            ),
             direction: Vec2::new(1.0, 0.0),
             tick: START_TICK,
-            grid_size: 20,
+            grid_size,
             highscore,
             ..Default::default()
         }
@@ -78,15 +83,19 @@ impl Game for Snake {
         // check for collision with apple
         if new_head == self.apple {
             self.segments.push_front(self.apple);
-            self.apple = random_pos(self.grid_size, self.segments.make_contiguous());
+            self.apple = random_pos(
+                self.grid_size.x as u32,
+                self.grid_size.y as u32,
+                self.segments.make_contiguous(),
+            );
             self.score += 1;
             self.tick *= 0.9;
         } else {
             // check for collision with walls or snake
             if new_head.x < 0.0
-                || new_head.x >= self.grid_size as f32
+                || new_head.x >= self.grid_size.x
                 || new_head.y < 0.0
-                || new_head.y >= self.grid_size as f32
+                || new_head.y >= self.grid_size.y
                 || self.segments.contains(&new_head)
             {
                 // game over
@@ -101,43 +110,54 @@ impl Game for Snake {
     }
 
     fn draw(&mut self, ctx: &mut DrawContext<'_>, size: Vec2) {
-        let w = size.x / self.grid_size as f32;
-        let h = size.y / self.grid_size as f32;
+        ctx.sub_rect_margin(
+            self.grid_size.x / self.grid_size.y,
+            40.,
+            Some(Color32::GRAY),
+            |ctx, size| {
+                let w = size.x / self.grid_size.x;
+                let h = size.y / self.grid_size.y;
 
-        let head_color = if self.collision {
-            Color32::RED
-        } else {
-            Color32::WHITE
-        };
-        ctx.rect_filled(
-            (self.segments[0].x * w, self.segments[0].y * h),
-            (w, h),
-            head_color,
+                let head_color = if self.collision {
+                    Color32::RED
+                } else {
+                    Color32::WHITE
+                };
+                ctx.rect_filled(
+                    (self.segments[0].x * w, self.segments[0].y * h),
+                    (w, h),
+                    head_color,
+                );
+                for segment in self.segments.iter().skip(1) {
+                    ctx.rect_filled((segment.x * w, segment.y * h), (w, h), Color32::WHITE);
+                }
+                ctx.rect_filled((self.apple.x * w, self.apple.y * h), (w, h), Color32::GREEN);
+            },
         );
-        for segment in self.segments.iter().skip(1) {
-            ctx.rect_filled((segment.x * w, segment.y * h), (w, h), Color32::WHITE);
-        }
-        ctx.rect_filled((self.apple.x * w, self.apple.y * h), (w, h), Color32::GREEN);
         if self.collision {
-            let rect = ctx
-                .text_centered_anchor(
-                    (size.x / 2.0, size.y / 2.0),
-                    "Game Over!\n Press R to restart",
+            let score_text = ctx.draw_centered(|ctx: &mut DrawContext<'_>| {
+                let rect = ctx
+                    .text_centered_anchor(
+                        (size.x / 2.0, size.y / 2.0),
+                        "Game Over!\n Press R to restart",
+                        30.,
+                        Color32::WHITE,
+                        Anchor::TopCenter,
+                    )
+                    .rect();
+                ctx.text_centered_anchor(
+                    (size.x / 2.0, rect.min.y + rect.height() + 10.0),
+                    format!("Score: {}\nHighscore: {}", self.score, self.highscore),
                     30.,
-                    Color32::WHITE,
+                    Color32::GREEN,
                     Anchor::TopCenter,
                 )
                 .rect();
-            ctx.text_centered_anchor(
-                (size.x / 2.0, rect.min.y + rect.height() + 10.0),
-                format!("Score: {}\nHighscore: {}", self.score, self.highscore),
-                30.,
-                Color32::GREEN,
-                Anchor::TopCenter,
-            );
+            });
+            score_text.background(10., Color32::from_black_alpha(200));
         } else {
             ctx.text(
-                (size.x - 100.0, 10.0),
+                (10.0, 10.0),
                 format!("Score: {}", self.score),
                 20.,
                 Color32::WHITE,
@@ -152,11 +172,17 @@ impl Game for Snake {
     }
 }
 
-fn random_pos(max: usize, segments: &[Pos2]) -> Pos2 {
-    let mut pos = Pos2::new(random_usize(0..max) as f32, random_usize(0..max) as f32);
-    // check if pos is in segments
+fn random_pos(width: u32, height: u32, segments: &[Pos2]) -> Pos2 {
+    let mut pos = Pos2::new(random_u32(0..width) as f32, random_u32(0..height) as f32);
+    // check if position is in segments
     while segments.contains(&pos) {
-        pos = Pos2::new(random_usize(0..max) as f32, random_usize(0..max) as f32);
+        // move to next cell until we find a free one
+        if pos.x < width as f32 - 1. {
+            pos.x += 1.;
+        } else {
+            pos.x = 0.;
+            pos.y += 1.;
+        }
     }
     pos
 }

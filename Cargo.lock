@@ -1203,7 +1203,7 @@ dependencies = [
 [[package]]
 name = "egui_game"
 version = "0.1.0"
-source = "git+ssh://git@github.com/MnlPhlp/egui_game.git#fe0eb9ec59f171cfb1509d7f97b8e9ba849663dc"
+source = "git+ssh://git@github.com/MnlPhlp/egui_game.git#3bd29038381327b9470d7b7626eeccc2adb11572"
 dependencies = [
  "anyhow",
  "eframe",
@@ -1213,6 +1213,7 @@ dependencies = [
  "fastrand",
  "image",
  "log",
+ "paste",
  "pollster",
  "rfd",
  "serde",
